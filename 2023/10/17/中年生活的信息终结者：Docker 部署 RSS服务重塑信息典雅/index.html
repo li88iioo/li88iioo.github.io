@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta name="msvalidate.01" content="01FDB3D56D3C5CB9F85031529EFDE197" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="No Name" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <meta name="description" content="留档一些则腾笔记" />
+  
+  
+  
+  <title>
+    
+      中年生活的信息终结者：Docker 部署 RSS服务重塑信息典雅 
+      
+      
+      |
+    
+     Ｘ小站
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.svg">
+    <link rel="icon" href="/images/favicon.svg">
+  
+
+  <!-- Raleway-Font -->
+  <!-- 
+  <link href="https://fonts.googleapis.com/css?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  -->
+
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img no-lazy src="/images/avatar.webp" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/"></a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/notes/">
+          <a href="/notes/">笔记</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">中年生活的信息终结者：Docker 部署 RSS服务重塑信息典雅</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2023-10-17 07:19:05
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Docker/" title="Docker">
+                    #Docker
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>信息自由航行：中年人的 RSS服务器 Docker 部署指南</p>
+<blockquote>
+<p>在当今信息爆炸的时代，我们中年人常常陷入信息过载的困境。社交媒体、新闻网站、博客和论坛，无处不在的信息源涌入我们的生活。然而，与此同时，我们也面临着信息过载的问题，很难从这海量信息中筛选出真正有价值的内容。这就是通常被戏称为“信息阳痿”的困扰。</p>
+<p>幸运的是，自托管RSS阅读器，可以帮助我们解决这个问题。而且，通过使用Docker容器化技术，我们能够轻松地部署和管理RSS，为中年人的信息管理提供了全新的解决方案。</p>
+</blockquote>
+<h1 id="TinyTinyRSS-FreshRSS简介"><a href="#TinyTinyRSS-FreshRSS简介" class="headerlink" title="TinyTinyRSS&amp;&amp;FreshRSS简介"></a>TinyTinyRSS&amp;&amp;FreshRSS简介</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://tt-rss.org/">TinyTinyRSS</a>&amp;&amp;<a target="_blank" rel="noopener" href="https://freshrss.org/">FreshRSS</a>是一个开源的自托管RSS阅读器，它可以帮助你订阅你喜爱的博客、新闻网站和其他信息源。与传统的社交媒体不同，RSS阅读器让你完全掌握信息源，避免了算法过滤和信息泛滥。你可以根据自己的兴趣订阅各种源，将信息集中在一个平台上进行阅读。</p>
+</blockquote>
+<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="https://cloudflare.free-img.ososo.org/file/1732424248250_image-ahtz.png" alt="image-ahtz.png"></p>
+<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="https://cloudflare.free-img.ososo.org/file/1732424249234_image-znda.png" alt="image-znda.png"></p>
+<h2 id="ttrss部署"><a href="#ttrss部署" class="headerlink" title="ttrss部署"></a>ttrss部署</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/docker/ttrss</span><br><span class="line">cd /opt/docker/ttrss</span><br><span class="line">nano docker-compose.yml</span><br><span class="line"></span><br><span class="line">version: &quot;3&quot;</span><br><span class="line">services:</span><br><span class="line">  service.rss:</span><br><span class="line">    image: wangqiru/ttrss:latest</span><br><span class="line">    container_name: ttrss</span><br><span class="line">    ports:</span><br><span class="line">      - 181:80</span><br><span class="line">    environment:</span><br><span class="line">      - SELF_URL_PATH=http://localhost:181/ # please change to your own domain</span><br><span class="line">      - DB_PASS=ttrss # use the same password defined in database.postgres</span><br><span class="line">      - PUID=1000</span><br><span class="line">      - PGID=1000</span><br><span class="line">    volumes:</span><br><span class="line">      - feed-icons:/var/www/feed-icons/</span><br><span class="line">    networks:</span><br><span class="line">      - public_access</span><br><span class="line">      - service_only</span><br><span class="line">      - database_only</span><br><span class="line">    stdin_open: true</span><br><span class="line">    tty: true</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">  service.mercury: # set Mercury Parser API endpoint to service.mercury:3000 on TTRSS plugin setting page</span><br><span class="line">    image: wangqiru/mercury-parser-api:latest</span><br><span class="line">    container_name: mercury</span><br><span class="line">    networks:</span><br><span class="line">      - public_access</span><br><span class="line">      - service_only</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">  service.opencc: # set OpenCC API endpoint to service.opencc:3000 on TTRSS plugin setting page</span><br><span class="line">    image: wangqiru/opencc-api-server:latest</span><br><span class="line">    container_name: opencc</span><br><span class="line">    environment:</span><br><span class="line">      - NODE_ENV=production</span><br><span class="line">    networks:</span><br><span class="line">      - service_only</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">  database.postgres:</span><br><span class="line">    image: postgres:13-alpine</span><br><span class="line">    container_name: postgres</span><br><span class="line">    environment:</span><br><span class="line">      - POSTGRES_PASSWORD=ttrss # feel free to change the password</span><br><span class="line">    volumes:</span><br><span class="line">      - ~/postgres/data/:/var/lib/postgresql/data # persist postgres data to ~/postgres/data/ on the host</span><br><span class="line">    networks:</span><br><span class="line">      - database_only</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">  # utility.watchtower:</span><br><span class="line">  #   container_name: watchtower</span><br><span class="line">  #   image: containrrr/watchtower:latest</span><br><span class="line">  #   volumes:</span><br><span class="line">  #     - /var/run/docker.sock:/var/run/docker.sock</span><br><span class="line">  #   environment:</span><br><span class="line">  #     - WATCHTOWER_CLEANUP=true</span><br><span class="line">  #     - WATCHTOWER_POLL_INTERVAL=86400</span><br><span class="line">  #   restart: always</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  feed-icons:</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  public_access: # Provide the access for ttrss UI</span><br><span class="line">  service_only: # Provide the communication network between services only</span><br><span class="line">    internal: true</span><br><span class="line">  database_only: # Provide the communication between ttrss and database only</span><br><span class="line">    internal: true</span><br></pre></td></tr></table></figure>
+<p>ctrl+x 保存</p>
+<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+
+<h2 id="FreshRSS部署"><a href="#FreshRSS部署" class="headerlink" title="FreshRSS部署"></a>FreshRSS部署</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/docke/frss</span><br><span class="line">cd /opt/docker/ttrss</span><br><span class="line">nano docker-compose.yml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  freshrss-db:</span><br><span class="line">    image: postgres:latest</span><br><span class="line">    container_name: freshrss-db</span><br><span class="line">    hostname: freshrss-db</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    volumes:</span><br><span class="line">      - freshrss-db:/var/lib/postgresql/data</span><br><span class="line">    environment:</span><br><span class="line">      POSTGRES_USER: freshrss</span><br><span class="line">      POSTGRES_PASSWORD: freshrss</span><br><span class="line">      POSTGRES_DB: freshrss</span><br><span class="line"></span><br><span class="line">  freshrss-app:</span><br><span class="line">    image: freshrss/freshrss:latest</span><br><span class="line">    container_name: freshrss-app</span><br><span class="line">    hostname: freshrss-app</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8088:80&quot;#左边端口号自行修改</span><br><span class="line">    depends_on:</span><br><span class="line">      - freshrss-db</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/var/www/FreshRSS/data</span><br><span class="line">      - ./extensions:/var/www/FreshRSS/extensions</span><br><span class="line">    environment:</span><br><span class="line">      CRON_MIN: &#x27;*/45&#x27;</span><br><span class="line">      TZ: Asia/Shanghai</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  freshrss-db:</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+<h3 id="一些设置"><a href="#一些设置" class="headerlink" title="一些设置"></a>一些设置</h3><p>一 设置-账户-账户管理-API管理设置密码</p>
+<p>输入“<code>域名/api/</code>”获取第三方客户端登陆地址</p>
+<p>主要有两个</p>
+<p><code>/api/greader.php/</code></p>
+<p><code>/api/fever.php/</code></p>
+<p>二 设置-管理-认证</p>
+<p>勾选API允许API访问</p>
+<p>通过这简单的几步，你就成功地将Tiny Tiny RSS部署在了Docker容器中，为中年人的信息管理带来了新的解决方案。不再被信息泛滥所困扰，你可以更加自由、高效地获取到你想要的信息，让信息自由航行在你的生活中。</p>
+<h1 id="安卓客户端推荐FeedMe"><a href="#安卓客户端推荐FeedMe" class="headerlink" title="安卓客户端推荐FeedMe"></a>安卓客户端推荐<a target="_blank" rel="noopener" href="https://github.com/seazon/FeedMe/releases">FeedMe</a></h1><blockquote>
+<p>注</p>
+<p>ttrss地址直接填写服务器地址，fever 地址回报错</p>
+<p>freshrss地址填写&#x2F;api&#x2F;greader.php&#x2F;</p>
+</blockquote>
+<p>RSS源推荐 <a href="RSSHUB.APP">RSSHUB.APP</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/10/14/%E6%88%90%E9%83%BD%E7%94%B5%E4%BF%A1%20Openwrt%20IPTV%20%E8%AE%BE%E7%BD%AE/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2023-10-17 07:19:05
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Docker/" title="Docker">
+                        #Docker
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/10/30/%E5%BC%80%E6%BA%90AI%E4%BA%BA%E8%84%B8%E6%9B%BF%E6%8D%A2%E5%B7%A5%E5%85%B7%E7%A6%BB%E7%BA%BF%E7%89%88V3.0%20%E6%95%B4%E5%90%88%E5%8C%85/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TinyTinyRSS-FreshRSS%E7%AE%80%E4%BB%8B"><span class="toc-text">TinyTinyRSS&amp;&amp;FreshRSS简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ttrss%E9%83%A8%E7%BD%B2"><span class="toc-text">ttrss部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="toc-text">启动容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FreshRSS%E9%83%A8%E7%BD%B2"><span class="toc-text">FreshRSS部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-text">启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E8%AE%BE%E7%BD%AE"><span class="toc-text">一些设置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%8D%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A8%E8%8D%90FeedMe"><span class="toc-text">安卓客户端推荐FeedMe</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a href="https://blog.aikill.top/">© 2024 Ｘ小站</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+
+
+        
+
+      </div>
+    </div>
+  
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body>
+</html>

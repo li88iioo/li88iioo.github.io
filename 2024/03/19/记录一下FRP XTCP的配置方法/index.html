@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta name="msvalidate.01" content="01FDB3D56D3C5CB9F85031529EFDE197" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="No Name" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <meta name="description" content="留档一些则腾笔记" />
+  
+  
+  
+  <title>
+    
+      记录一下FRP XTCP的配置方法 
+      
+      
+      |
+    
+     Ｘ小站
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.svg">
+    <link rel="icon" href="/images/favicon.svg">
+  
+
+  <!-- Raleway-Font -->
+  <!-- 
+  <link href="https://fonts.googleapis.com/css?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  -->
+
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img no-lazy src="/images/avatar.webp" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/"></a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/notes/">
+          <a href="/notes/">笔记</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">记录一下FRP XTCP的配置方法</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2024-03-19 11:10:21
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Docker/" title="Docker">
+                    #Docker
+                  </a>
+                </span>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/frp/" title="frp">
+                    #frp
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="记录一下FRP-XTCP的配置方法"><a href="#记录一下FRP-XTCP的配置方法" class="headerlink" title="记录一下FRP XTCP的配置方法"></a>记录一下FRP XTCP的配置方法</h2><blockquote>
+<p><strong>什么是xtcp</strong><br>在 FRP（Fast Reverse Proxy）的 XTCP 功能中，<code>frps</code>（FRP<br>服务端）扮演着至关重要的角色，尽管它不直接参与数据的最终传输。XTCP 是一种穿透技术，使得处于不同 NAT<br>或防火墙后的两个网络设备能够建立直接的连接。在这种模式下，<code>frps</code> 的作用主要包括：</p>
+<ol>
+<li><p><strong>中继握手信息</strong>：当两个客户端（通过 <code>frpc</code> 运行）尝试建立 XTCP 连接时，<code>frps</code> 作为中介，负责转发这两个客户端之间的握手信息。这是建立 P2P（点对点）连接的先决条件，因为大多数客户端都处在 NAT<br>或防火墙后面，无法直接发现对方或建立连接。</p>
+</li>
+<li><p><strong>协助穿透 NAT</strong>：在 XTCP 的握手过程中，<code>frps</code> 会帮助两端的 <code>frpc</code> 客户端交换必要的信息（如公网 IP 地址和端口），这些信息是实现 NAT 穿透的关键。通过这种方式，即便客户端位于复杂的网络环境中，也能够尝试直接相互连接。</p>
+</li>
+<li><p><strong>回退到中继传输（可选）</strong>：在某些情况下，比如当 NAT 类型特别严格或环境复杂到阻碍了直接的 P2P 连接时，<code>frps</code> 可以提供回退方案，即通过服务器中继来传输数据。虽然这增加了延迟并需要更多的服务器带宽，但它确保了连接的可靠性。需要注意的是，FRP 的<br>XTCP 功能主要目标是尽量实现直接的 P2P 连接，而不依赖服务器中继传输数据。</p>
+</li>
+<li><p><strong>安全性和访问控制</strong>：<code>frps</code> 还管理着客户端的认证过程，确保只有授权的客户端可以建立连接。此外，它可以对连接进行加密和压缩设置，提高数据传输的安全性和效率。</p>
+</li>
+</ol>
+<p>总之，虽然 <code>frps</code> 在 XTCP<br>模式下的数据传输过程中不直接参与数据的最终传递，但它在建立连接的初期阶段发挥着至关重要的作用，包括但不限于握手信息的中继、帮助实现 NAT<br>穿透、提供回退的中继传输方案以及执行安全性和访问控制。for ChatGPT</p>
+</blockquote>
+<h3 id="1-确认环境要求"><a href="#1-确认环境要求" class="headerlink" title="1. 确认环境要求"></a>1. 确认环境要求</h3><ul>
+<li><p><strong>两个客户端</strong>：确保你有两个处于不同 NAT 或防火墙后的客户端设备，这两个客户端都需要能够访问到 FRP 服务器。</p>
+</li>
+<li><p><strong>一个服务器</strong>：一个可以被上述客户端访问的服务器，用来部署 FRP 服务端。这个服务器需要有固定的公网 IP 或域名。</p>
+</li>
+</ul>
+<blockquote>
+<p>这里我准备了一台内网服务器 <code>&#39; A &#39;</code>，两台公网服务器，含一台优质线路，低宽带低流量 <code>&#39; S &#39; </code>，一台高宽带高流量线路一般的服务器<code>&#39; D &#39;</code>）。实测基本能跑满加宽上行。）</p>
+</blockquote>
+<h3 id="2-安装-FRP"><a href="#2-安装-FRP" class="headerlink" title="2. 安装 FRP"></a>2. 安装 FRP</h3><blockquote>
+<p>frps为服务端，frpc为客户端，安装方法请参考<a target="_blank" rel="noopener" href="https://gofrp.org/zh-cn/docs/setup/">安装 | frp (gofrp.org)</a></p>
+</blockquote>
+<p>Docker compose安装示列,包含<code>frps</code>，<code>frpc</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  frps:</span><br><span class="line">    image: snowdreamtech/frps</span><br><span class="line">    container_name: frps</span><br><span class="line">    network_mode: host</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data/frps.toml:/etc/frp/frps.toml</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">  frpc:</span><br><span class="line">    image: snowdreamtech/frpc</span><br><span class="line">    container_name: frpc</span><br><span class="line">    network_mode: host</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data/frpc.toml:/etc/frp/frpc.toml</span><br><span class="line">    restart: always</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>内网服务器</strong> <code>A</code><strong>安装frpc</strong></li>
+<li><strong>公网服务器</strong><code>D</code><strong>安装frpc</strong></li>
+<li><strong>公网服务器</strong><code>S</code><strong>安装frps</strong></li>
+</ul>
+<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h3><p><strong>这里以穿透内网群晖为例</strong><br>下文看不懂可以参考<a target="_blank" rel="noopener" href="https://gofrp.org/zh-cn/docs/examples/xtcp/">点对点内网穿透 | frp (gofrp.org)</a></p>
+<h4 id="1-群晖或任意内网设备安装好frpc后，这里称为-被访问者-A"><a href="#1-群晖或任意内网设备安装好frpc后，这里称为-被访问者-A" class="headerlink" title="1.群晖或任意内网设备安装好frpc后，这里称为 被访问者 A"></a>1.群晖或任意内网设备安装好<code>frpc</code>后，这里称为 <em><strong>被访问者</strong></em> A</h4><p>进入你的安装目录配置<code>.toml</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd opt/frpc/data</span><br><span class="line">nano frpc.toml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">serverAddr = &quot;1.1.1.1&quot;#服务器 S 的IP地址</span><br><span class="line">serverPort = 7000#服务器 S 的frps端口号，一般为7000</span><br><span class="line">auth.token = &quot;123&quot;#密钥，可选</span><br><span class="line"></span><br><span class="line">[[proxies]]</span><br><span class="line">name = &quot;nas-xtcp#名称随意&quot;</span><br><span class="line">type = &quot;xtcp&quot;</span><br><span class="line">secretKey = &quot;123441&quot;#密钥随意</span><br><span class="line">localIP = &quot;192.168.88.2&quot;#群晖内网地址</span><br><span class="line">localPort = 5001#群晖内网端口</span><br></pre></td></tr></table></figure>
+<p><code>ctrl+x</code> <code>y</code>保存.</p>
+<h4 id="2-配置frps服务端-S"><a href="#2-配置frps服务端-S" class="headerlink" title="2.配置frps服务端 S"></a>2.配置<code>frps</code><em><strong>服务端</strong></em> S</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd opt/frps/data#这里是你的安装路径</span><br><span class="line">nano frps.toml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bindPort = 7000</span><br><span class="line">auth.token = &quot;123&quot;密钥</span><br><span class="line"></span><br><span class="line">webServer.addr = &quot;0.0.0.0&quot;</span><br><span class="line">webServer.port = 7500#web面板端口</span><br><span class="line">webServer.user = &quot;admin&quot;web面板账号</span><br><span class="line">webServer.password = &quot;adMin&quot;web面板密码</span><br></pre></td></tr></table></figure>
+<h4 id="3-配置frpc-访问者-D"><a href="#3-配置frpc-访问者-D" class="headerlink" title="3.配置frpc 访问者 D"></a>3.配置<code>frpc</code> <em><strong>访问者</strong></em> D</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd opt/frpc/data</span><br><span class="line">nano frpc.toml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">serverAddr = &quot;1.1.1.1&quot;#服务器 S 的IP地址</span><br><span class="line">serverPort = 7000#服务器 S 的frps端口号</span><br><span class="line">auth.token = &quot;123&quot;#密钥</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[[visitors]]</span><br><span class="line">name = &quot;p2p_nas_visitor&quot;#这里名字随意</span><br><span class="line">type = &quot;xtcp&quot;</span><br><span class="line"># 要访问的 P2P 代理的名称</span><br><span class="line">serverName = &quot;nas-xtcp&quot;#这里要与***被访问者名字***一致</span><br><span class="line">secretKey = &quot;123441&quot;#这里要与***被访问者密码***一致</span><br><span class="line"># 绑定本地端口以访问 SSH 服务</span><br><span class="line">bindAddr = &quot;127.0.0.1&quot;#你服务器的内网地址，可以不用修改</span><br><span class="line">bindPort = 15001#你服务器未使用的端口</span><br><span class="line"># 如果需要自动保持隧道打开，将其设置为 true</span><br><span class="line">keepTunnelOpen = true</span><br></pre></td></tr></table></figure>
+<p>配置完成后重启下一服务器 <em><strong>s</strong></em> <em><strong>a</strong></em> <em><strong>d</strong></em></p>
+<p>接下来使用<code>D</code>服务器的<strong>IP+15001</strong>就能访问内网群晖了。</p>
+<p>反向代理简单示列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">location ^~ / &#123;</span><br><span class="line">    proxy_pass https://127.0.0.1:15001; </span><br><span class="line">    proxy_set_header Host $host; </span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr; </span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; </span><br><span class="line">    proxy_set_header REMOTE-HOST $remote_addr; </span><br><span class="line">    proxy_set_header Upgrade $http_upgrade; </span><br><span class="line">    proxy_set_header Connection &quot;upgrade&quot;; </span><br><span class="line">    proxy_set_header X-Forwarded-Proto $scheme; </span><br><span class="line">    proxy_http_version 1.1; </span><br><span class="line">    add_header X-Cache $upstream_cache_status; </span><br><span class="line">    add_header Strict-Transport-Security &quot;max-age=31536000&quot;; </span><br><span class="line">    add_header Cache-Control no-cache; </span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2024/03/08/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8BHexo%E9%83%A8%E7%BD%B2%E7%9A%84%E8%BF%87%E7%A8%8B/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2024-03-19 11:10:21
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Docker/" title="Docker">
+                        #Docker
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/frp/" title="frp">
+                        #frp
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2024/11/24/%E9%80%82%E7%94%A8%E4%BA%8EDebian%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E8%84%9A%E6%9C%AC/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8BFRP-XTCP%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-text">记录一下FRP XTCP的配置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A1%AE%E8%AE%A4%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-text">1. 确认环境要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-FRP"><span class="toc-text">2. 安装 FRP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE"><span class="toc-text">3. 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%BE%A4%E6%99%96%E6%88%96%E4%BB%BB%E6%84%8F%E5%86%85%E7%BD%91%E8%AE%BE%E5%A4%87%E5%AE%89%E8%A3%85%E5%A5%BDfrpc%E5%90%8E%EF%BC%8C%E8%BF%99%E9%87%8C%E7%A7%B0%E4%B8%BA-%E8%A2%AB%E8%AE%BF%E9%97%AE%E8%80%85-A"><span class="toc-text">1.群晖或任意内网设备安装好frpc后，这里称为 被访问者 A</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEfrps%E6%9C%8D%E5%8A%A1%E7%AB%AF-S"><span class="toc-text">2.配置frps服务端 S</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AEfrpc-%E8%AE%BF%E9%97%AE%E8%80%85-D"><span class="toc-text">3.配置frpc 访问者 D</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a href="https://blog.aikill.top/">© 2024 Ｘ小站</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+
+
+        
+
+      </div>
+    </div>
+  
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body>
+</html>
