@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta name="msvalidate.01" content="01FDB3D56D3C5CB9F85031529EFDE197" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="No Name" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <meta name="description" content="留档一些则腾笔记" />
+  
+  
+  
+  <title>
+    
+      inter 12代处理器PVE Sriov 流程 
+      
+      
+      |
+    
+     Ｘ小站
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.svg">
+    <link rel="icon" href="/images/favicon.svg">
+  
+
+  <!-- Raleway-Font -->
+  <!-- 
+  <link href="https://fonts.googleapis.com/css?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  -->
+
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img no-lazy src="/images/avatar.webp" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/"></a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/notes/">
+          <a href="/notes/">笔记</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">inter 12代处理器PVE Sriov 流程</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2023-10-03 08:14:46
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/PVE/" title="PVE">
+                    #PVE
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="一、PVE安装命令行跳过检测方法："><a href="#一、PVE安装命令行跳过检测方法：" class="headerlink" title="一、PVE安装命令行跳过检测方法："></a>一、PVE安装命令行跳过检测方法：</h2><p>配置文件中创建一个设备描述</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /usr/share/X11/xorg.conf.d/10-quirks.conf</span><br></pre></td></tr></table></figure>
+
+<p> 在结尾添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Section &quot;Device&quot;    </span><br><span class="line">    Identifier &quot;Card0&quot;     </span><br><span class="line">    Driver &quot;fbdev&quot;</span><br><span class="line">EndSection</span><br></pre></td></tr></table></figure>
+
+<p>ctrl+x  y 回车保存退出</p>
+<p> <code># xinit</code></p>
+<p>回车运行后会进入熟悉的PVE图形化安装界面，安装完成。</p>
+<p> 启动PVE，进入WebUI</p>
+<h2 id="二、PVE换源："><a href="#二、PVE换源：" class="headerlink" title="二、PVE换源："></a>二、PVE换源：</h2><h2 id="1、更换为国内清华源："><a href="#1、更换为国内清华源：" class="headerlink" title="1、更换为国内清华源："></a>1、更换为国内清华源：</h2><p>将自带的源文件sources.list备份</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /etc/apt/sources.list /etc/apt/sources.list_bak</span><br></pre></td></tr></table></figure>
+
+<p> 编辑sources.list</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<p>粘贴一下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free</span><br></pre></td></tr></table></figure>
+
+<p>ctrl+x 点y 回车保存退出</p>
+<p>编辑pve企业源：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/apt/sources.list.d/pve-enterprise.list</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将其中原有的proxmox句首加# 注释掉，变为：#deb <a target="_blank" rel="noopener" href="https://enterprise.proxmox.com/debian/pve">https://enterprise.proxmox.com/debian/pve</a> bullseye pve-enterprise</p>
+</blockquote>
+<p>添加以下清华源：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/proxmox/debian bullseye pve-no-subscription</span><br></pre></td></tr></table></figure>
+
+<p>ctrl+x  y 回车保存退出</p>
+<p>更新并升级</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt dist-upgrade -y</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、LXC更换为清华源："><a href="#2、LXC更换为清华源：" class="headerlink" title="2、LXC更换为清华源："></a>2、LXC更换为清华源：</h2><p><a target="_blank" rel="noopener" href="http://备份aplinfo.pm/">备份APLInfo.pm</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/perl5/PVE/APLInfo.pm /usr/share/perl5/PVE/APLInfo.pm_back</span><br></pre></td></tr></table></figure>
+
+<p>更换为清华源：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &#x27;s|http://download.proxmox.com|https://mirrors.tuna.tsinghua.edu.cn/proxmox|g&#x27; /usr/share/perl5/PVE/APLInfo.pm</span><br></pre></td></tr></table></figure>
+
+<p>重启服务后生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart pvedaemon.service</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、升级6-2内核、headers和firmware"><a href="#三、升级6-2内核、headers和firmware" class="headerlink" title="三、升级6.2内核、headers和firmware"></a>三、升级6.2内核、headers和firmware</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install -y pve-kernel-6.2.11-2-pve pve-headers-6.2.11-2-pve pve-firmware</span><br></pre></td></tr></table></figure>
+
+<p>重启reboot</p>
+<h2 id="四、编译i915-sriov驱动"><a href="#四、编译i915-sriov驱动" class="headerlink" title="四、编译i915-sriov驱动"></a>四、编译i915-sriov驱动</h2><p>安装工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install -y build-* git dkms</span><br></pre></td></tr></table></figure>
+
+<p>拖库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/strongtz/i915-sriov-dkms.git</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> cd i915-sriov-dkms</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> nano dkms.conf</span><br></pre></td></tr></table></figure>
+
+<p>第一行改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PACKAGE_NAME=&quot;i915-sriov-dkms&quot;</span><br></pre></td></tr></table></figure>
+
+<p>第二行改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PACKAGE_VERSION=&quot;6.2&quot;</span><br></pre></td></tr></table></figure>
+
+<p>ctrl+x  y 回车保存退出</p>
+<p>复制此文件夹到相应目录，开始编译</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r /root/i915-sriov-dkms/ /usr/src/i915-sriov-dkms-6.2</span><br></pre></td></tr></table></figure>
+
+<p>进入目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/src/i915-sriov-dkms-6.2</span><br></pre></td></tr></table></figure>
+
+<p>pve7.x执行编译命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dkms install -m i915-sriov-dkms -v 6.2</span><br></pre></td></tr></table></figure>
+
+<p>pve8.0执行编译命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dkms install -m i915-sriov-dkms -v 6.2 --force</span><br></pre></td></tr></table></figure>
+
+<p> 编译完成后检查状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dkms status</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、设置直通和i915guc"><a href="#五、设置直通和i915guc" class="headerlink" title="五、设置直通和i915guc"></a>五、设置直通和i915guc</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/default/grub</span><br></pre></td></tr></table></figure>
+
+<p>在quiet后添加<code>intel_iommu=on i915.enable_guc=3 i915.max_vfs=7</code></p>
+<blockquote>
+<p>改成GRUB_CMDLINE_LINUX_DEFAULT&#x3D;”quiet intel_iommu&#x3D;on i915.enable_guc&#x3D;3 i915.max_vfs&#x3D;7”</p>
+</blockquote>
+<p>ctrl+x  y 回车保存退出</p>
+<p>顺便把设备直通的其他操作一起做了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/modules</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vfio</span><br><span class="line"></span><br><span class="line">vfio_iommu_type1</span><br><span class="line"></span><br><span class="line">vfio_pci</span><br><span class="line"></span><br><span class="line">vfio_virqfd</span><br></pre></td></tr></table></figure>
+
+<p>更新配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update-grub</span><br><span class="line"></span><br><span class="line">update-initramfs -u</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、安装sysfsutils"><a href="#六、安装sysfsutils" class="headerlink" title="六、安装sysfsutils"></a>六、安装sysfsutils</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install -y sysfsutils</span><br></pre></td></tr></table></figure>
+
+<p>添加以下VFs参数，N100建议最高3，可自定义数量，建议按需设置，设置1个时性能最强。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;devices/pci0000:00/0000:00:02.0/sriov_numvfs = 3&quot; &gt; /etc/sysfs.conf</span><br></pre></td></tr></table></figure>
+
+<p>重启reboot</p>
+<p>lspci检查直通的虚拟显卡，显示如下：</p>
+<p>00:02.0 VGA compatible controller: Intel Corporation Device 46d1（物理核显）</p>
+<p>00:02.1 VGA compatible controller: Intel Corporation Device 46d1（虚拟核显1）</p>
+<p>00:02.2 VGA compatible controller: Intel Corporation Device 46d1（虚拟核显2）</p>
+<p>00:02.3 VGA compatible controller: Intel Corporation Device 46d1（虚拟核显3）</p>
+<p>注意虚拟核显越多，性能越低。只需要1个时，虚拟1个核显即可。就像切西瓜，整体就这么大，人数越多每个人分到的瓜越小。</p>
+<h2 id="七、将虚拟核显添加到虚拟机中，如Win10-11"><a href="#七、将虚拟核显添加到虚拟机中，如Win10-11" class="headerlink" title="七、将虚拟核显添加到虚拟机中，如Win10&#x2F;11"></a>七、将虚拟核显添加到虚拟机中，如Win10&#x2F;11</h2><blockquote>
+<p>硬件内注意事项：</p>
+<p>内存：4GiB （或者更多）</p>
+<p>CPU类别：host （硬解建议给全部核心，比如N100 4cores）</p>
+<p>BIOS：OVMF(UEFI)</p>
+<p>显示：默认标准 核显直通后可改为无(none) *注意选择无(none)时长时间运行会出问题【VM 100 qmp command ‘set_password’ failed - Could not set password】导致虚拟Win死机时，则需改为标准VGA(std)</p>
+<p>机型：pc-q35-7.2</p>
+<p>PCI设备虚拟核显：安装Win时建议不添加，Win装完关机添加虚拟核显时不要勾选主GPU，安装驱动并重启后不报错工作正常后，可以更改为主GPU</p>
+</blockquote>
+<p>Windows虚拟机</p>
+<p>为了提高Win虚拟机的性能，建议安装VirtIO的全部驱动，iso下载地址：</p>
+<p><a target="_blank" rel="noopener" href="https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.229-1/virtio-win-0.1.229.iso">https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.229-1/virtio-win-0.1.229.iso</a></p>
+<p>在必须满足虚拟机配置的前提下，安装当前最新的驱动，下面2个，二选一自行测试。</p>
+<p>英特尔® Arc™ 和锐炬® Xe 显卡 - WHQL - Windows* (<a target="_blank" rel="noopener" href="http://intel.cn/">intel.cn</a>)</p>
+<p><a target="_blank" rel="noopener" href="https://www.intel.cn/content/www/cn/zh/download/726609/intel-arc-iris-xe-graphics-whql-windows.html">https://www.intel.cn/content/www/cn/zh/download/726609/intel-arc-iris-xe-graphics-whql-windows.html</a>?</p>
+<p>英特尔® Arc™ 和锐®炬® Xe 显卡 - BETA - Windows* (<a target="_blank" rel="noopener" href="http://intel.cn/">intel.cn</a>)</p>
+<p><a target="_blank" rel="noopener" href="https://www.intel.cn/content/www/cn/zh/download/729157/intel-arc-iris-xe-graphics-beta-windows.html">https://www.intel.cn/content/www/cn/zh/download/729157/intel-arc-iris-xe-graphics-beta-windows.html</a></p>
+<p>Linux虚拟机：</p>
+<p>虚拟Ubuntu直通SRIOV核显参照以下“Linux虚拟机”部分</p>
+<p><a target="_blank" rel="noopener" href="https://foxi.buduanwang.vip/virtualization/pve/2695.html/">https://foxi.buduanwang.vip/virtualization/pve/2695.html/</a></p>
+<p>虚拟Deiban直通SRIOV核显参照以下“Linux虚拟机使用pve内核–不适用全部情况”</p>
+<p><a target="_blank" rel="noopener" href="https://foxi.buduanwang.vip/virtualization/pve/2695.html/">https://foxi.buduanwang.vip/virtualization/pve/2695.html/</a></p>
+<p>英特尔官网核显驱动方法<a target="_blank" rel="noopener" href="https://dgpu-docs.intel.com/installation-guides/ubuntu/ubuntu-focal-legacy.html#">https://dgpu-docs.intel.com/installation-guides/ubuntu/ubuntu-focal-legacy.html#</a></p>
+<h2 id="附送一个PVE8-X-一键换源，直通，Sriov-脚本"><a href="#附送一个PVE8-X-一键换源，直通，Sriov-脚本" class="headerlink" title="附送一个PVE8.X 一键换源，直通，Sriov 脚本"></a>附送一个PVE8.X 一键换源，直通，Sriov 脚本</h2><p><a target="_blank" rel="noopener" href="http://1换源.sh/">1换源.sh</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.aikiller.top/upload/2%E7%9B%B4%E9%80%9Asriov%20for%20Bard.sh">2直通sriov for</a> <a target="_blank" rel="noopener" href="http://bard.sh/">Bard.sh</a></p>
+<blockquote>
+<p>参考引用：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/strongtz/i915-sriov-dkms">https://github.com/strongtz/i915-sriov-dkms</a></p>
+<p><a target="_blank" rel="noopener" href="https://foxi.buduanwang.vip/virtualization/pve/2695.html/">https://foxi.buduanwang.vip/virtualization/pve/2695.html/</a></p>
+</blockquote>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/09/21/%E5%88%A9%E7%94%A8Cloudflare%20Tunnel%20%E4%B8%8A%E7%BA%BF%E6%9C%AC%E5%9C%B0%E7%BD%91%E7%AB%99%EF%BC%8C%E5%BA%94%E7%94%A8%EF%BC%8C%E6%97%A0%E9%9C%80%E5%A4%87%E6%A1%88%EF%BC%8C%E6%97%A0%E9%9C%80%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%99%BD%E5%AB%96%E7%A6%8F%E9%9F%B3/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2023-10-03 08:14:46
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/PVE/" title="PVE">
+                        #PVE
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/10/09/Docker%E9%83%A8%E7%BD%B2SearXNG%20%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%EF%BC%8C%E9%9A%90%E7%A7%81%E6%97%A0%E5%B9%BF%E5%91%8A/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81PVE%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B7%B3%E8%BF%87%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-text">一、PVE安装命令行跳过检测方法：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81PVE%E6%8D%A2%E6%BA%90%EF%BC%9A"><span class="toc-text">二、PVE换源：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%9B%B4%E6%8D%A2%E4%B8%BA%E5%9B%BD%E5%86%85%E6%B8%85%E5%8D%8E%E6%BA%90%EF%BC%9A"><span class="toc-text">1、更换为国内清华源：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81LXC%E6%9B%B4%E6%8D%A2%E4%B8%BA%E6%B8%85%E5%8D%8E%E6%BA%90%EF%BC%9A"><span class="toc-text">2、LXC更换为清华源：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8D%87%E7%BA%A76-2%E5%86%85%E6%A0%B8%E3%80%81headers%E5%92%8Cfirmware"><span class="toc-text">三、升级6.2内核、headers和firmware</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BC%96%E8%AF%91i915-sriov%E9%A9%B1%E5%8A%A8"><span class="toc-text">四、编译i915-sriov驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%AE%BE%E7%BD%AE%E7%9B%B4%E9%80%9A%E5%92%8Ci915guc"><span class="toc-text">五、设置直通和i915guc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%AE%89%E8%A3%85sysfsutils"><span class="toc-text">六、安装sysfsutils</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B0%86%E8%99%9A%E6%8B%9F%E6%A0%B8%E6%98%BE%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%AD%EF%BC%8C%E5%A6%82Win10-11"><span class="toc-text">七、将虚拟核显添加到虚拟机中，如Win10&#x2F;11</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E9%80%81%E4%B8%80%E4%B8%AAPVE8-X-%E4%B8%80%E9%94%AE%E6%8D%A2%E6%BA%90%EF%BC%8C%E7%9B%B4%E9%80%9A%EF%BC%8CSriov-%E8%84%9A%E6%9C%AC"><span class="toc-text">附送一个PVE8.X 一键换源，直通，Sriov 脚本</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a href="https://blog.aikill.top/">© 2024 Ｘ小站</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+
+
+        
+
+      </div>
+    </div>
+  
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body>
+</html>
