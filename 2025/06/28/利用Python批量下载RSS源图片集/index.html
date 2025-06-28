@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta name="msvalidate.01" content="7C83127B56F4119905E6D0B167D8128F" />
+  <meta name="google-site-verification" content="ngKFKPTfonxvT8-y3gLrg9i03a0c7oKkL_EaN6gb0dc" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="No Name" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <meta name="description" content="留档一些则腾笔记" />
+  
+  
+  
+  <title>
+    
+      利用Python批量下载RSS源图片集 
+      
+      
+      |
+    
+     Ｘ小站
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.svg">
+    <link rel="icon" href="/images/favicon.svg">
+  
+
+  <!-- Raleway-Font -->
+  <!-- 
+  <link href="https://fonts.googleapis.com/css?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  -->
+
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img no-lazy src="/images/logo.svg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/"></a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/notes/">
+          <a href="/notes/">笔记</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">利用Python批量下载RSS源图片集</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2025-06-28 04:23:53
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Python/" title="Python">
+                    #Python
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="⚠️-注意事项"><a href="#⚠️-注意事项" class="headerlink" title="⚠️ 注意事项"></a>⚠️ 注意事项</h2><ul>
+<li>请尊重网站的版权和 robots.txt 协议。</li>
+<li>请勿将并发数设置得过高，过度频繁的请求可能会给目标服务器带来较大负担，甚至导致你IP被封禁。</li>
+<li>本脚本仅供学习和个人收藏用途，请勿用于非法商业活动。</li>
+</ul>
+<h2 id="📁-文件结构"><a href="#📁-文件结构" class="headerlink" title="📁 文件结构"></a>📁 文件结构</h2><p>在运行前，请确保您的项目文件夹包含以下文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── downloader.py  # 主程序脚本</span><br><span class="line">├── config.yaml            # 配置文件</span><br><span class="line">├── requirements.txt       # Python 依赖库</span><br><span class="line">├── feeds.opml             # 你的 RSS 订阅列表 (需自行准备)</span><br><span class="line">│</span><br><span class="line">├── history.db             # (程序首次运行后自动生成) 下载历史数据库</span><br><span class="line">└── downloader_errors.log  # (出现错误后自动生成) 错误日志文件</span><br></pre></td></tr></table></figure>
+
+<p><em>(可选文件)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">└── cookies.txt            # (可选) 用于模拟登录的Cookie文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="🐍-主程序"><a href="#🐍-主程序" class="headerlink" title="🐍 主程序"></a>🐍 主程序</h2><p><code>downloader.py</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import os</span><br><span class="line">import re</span><br><span class="line">import time</span><br><span class="line">import feedparser</span><br><span class="line">import aiohttp</span><br><span class="line">import aiosqlite</span><br><span class="line">import yaml</span><br><span class="line">import html</span><br><span class="line">import argparse</span><br><span class="line">import logging</span><br><span class="line">import random</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">from urllib.parse import urlparse, urljoin</span><br><span class="line">from tqdm.asyncio import tqdm as aio_tqdm</span><br><span class="line">from http.cookies import SimpleCookie</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 日志设置</span><br><span class="line"># ==============================================================================</span><br><span class="line">logger = logging.getLogger(&quot;下载器&quot;)</span><br><span class="line"></span><br><span class="line">def setup_loggers(console_level=logging.INFO, error_file=&#x27;downloader_errors.log&#x27;):</span><br><span class="line">    &quot;&quot;&quot;配置控制台和文件日志记录器。&quot;&quot;&quot;</span><br><span class="line">    if logger.hasHandlers():</span><br><span class="line">        logger.handlers.clear()</span><br><span class="line">        </span><br><span class="line">    logger.setLevel(logging.DEBUG)</span><br><span class="line"></span><br><span class="line">    # 1. 控制台处理器</span><br><span class="line">    console_handler = logging.StreamHandler()</span><br><span class="line">    console_handler.setLevel(console_level)</span><br><span class="line">    console_formatter = logging.Formatter(</span><br><span class="line">        &#x27;%(asctime)s - %(levelname)s - [%(name)s] - %(message)s&#x27;,</span><br><span class="line">        datefmt=&#x27;%Y-%m-%d %H:%M:%S&#x27;</span><br><span class="line">    )</span><br><span class="line">    console_handler.setFormatter(console_formatter)</span><br><span class="line">    logger.addHandler(console_handler)</span><br><span class="line"></span><br><span class="line">    # 2. 错误文件处理器</span><br><span class="line">    try:</span><br><span class="line">        file_handler = logging.FileHandler(error_file, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;)</span><br><span class="line">        file_handler.setLevel(logging.WARNING)</span><br><span class="line">        file_formatter = logging.Formatter(</span><br><span class="line">            &#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;</span><br><span class="line">        )</span><br><span class="line">        file_handler.setFormatter(file_formatter)</span><br><span class="line">        logger.addHandler(file_handler)</span><br><span class="line">        logger.info(f&quot;错误日志将记录到: &#123;os.path.abspath(error_file)&#125;&quot;)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        logger.error(f&quot;无法创建错误日志文件 &#123;error_file&#125;: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 配置加载与正则表达式预编译</span><br><span class="line"># ==============================================================================</span><br><span class="line">CONFIG = &#123;&#125;</span><br><span class="line">REGEX = &#123;</span><br><span class="line">    &quot;image_file_ext&quot;: re.compile(r&#x27;\.(jpg|jpeg|png|webp|gif)$&#x27;, re.I),</span><br><span class="line">    &quot;blogspot_thumb&quot;: re.compile(r&#x27;/s\d+(-[a-z])?/&#x27;, re.I),</span><br><span class="line">    &quot;thumbnail_resize&quot;: re.compile(r&#x27;-\d+x\d+(\.\w+)$&#x27;),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def load_config(path=&#x27;config.yaml&#x27;):</span><br><span class="line">    &quot;&quot;&quot;从 YAML 文件加载配置。&quot;&quot;&quot;</span><br><span class="line">    global CONFIG</span><br><span class="line">    try:</span><br><span class="line">        with open(path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">            CONFIG = yaml.safe_load(f)</span><br><span class="line">        setup_loggers(error_file=CONFIG.get(&#x27;error_log_file&#x27;, &#x27;downloader_errors.log&#x27;))</span><br><span class="line">        logger.info(&quot;成功从 %s 加载配置。&quot;, path)</span><br><span class="line">    except FileNotFoundError:</span><br><span class="line">        print(f&quot;致命错误: 未找到 &#123;path&#125; 文件，请创建它。&quot;)</span><br><span class="line">        exit(1)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(f&quot;致命错误: 加载 &#123;path&#125; 出错: &#123;e&#125;&quot;)</span><br><span class="line">        exit(1)</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 数据库与Cookie (异步)</span><br><span class="line"># ==============================================================================</span><br><span class="line">class DatabaseManager:</span><br><span class="line">    &quot;&quot;&quot;异步管理用于存储下载历史的 SQLite 数据库 (基于文章标题全局去重)。&quot;&quot;&quot;</span><br><span class="line">    def __init__(self, db_path):</span><br><span class="line">        self._db_path = db_path</span><br><span class="line">        self._conn = None</span><br><span class="line"></span><br><span class="line">    async def connect(self):</span><br><span class="line">        try:</span><br><span class="line">            self._conn = await aiosqlite.connect(self._db_path)</span><br><span class="line">            await self._conn.execute(&quot;PRAGMA journal_mode=WAL;&quot;)</span><br><span class="line">            await self._conn.execute(&quot;&quot;&quot;</span><br><span class="line">                CREATE TABLE IF NOT EXISTS download_history (</span><br><span class="line">                    post_title TEXT PRIMARY KEY,</span><br><span class="line">                    download_date TEXT NOT NULL,</span><br><span class="line">                    source_feed TEXT</span><br><span class="line">                )</span><br><span class="line">            &quot;&quot;&quot;)</span><br><span class="line">            await self._conn.commit()</span><br><span class="line">            logger.info(&quot;数据库连接成功 (全局去重模式): %s&quot;, self._db_path)</span><br><span class="line">        except Exception as e:</span><br><span class="line">            logger.error(&quot;数据库连接失败: %s&quot;, e)</span><br><span class="line">            raise</span><br><span class="line"></span><br><span class="line">    async def is_downloaded(self, post_title):</span><br><span class="line">        &quot;&quot;&quot;检查一个文章标题是否已经被下载过。&quot;&quot;&quot;</span><br><span class="line">        async with self._conn.execute(</span><br><span class="line">            &quot;SELECT 1 FROM download_history WHERE post_title = ?&quot;,</span><br><span class="line">            (post_title,)</span><br><span class="line">        ) as cursor:</span><br><span class="line">            return await cursor.fetchone() is not None</span><br><span class="line"></span><br><span class="line">    async def add_entry(self, post_title, feed_title):</span><br><span class="line">        &quot;&quot;&quot;将一个文章标题添加到下载历史中。&quot;&quot;&quot;</span><br><span class="line">        now = time.strftime(&#x27;%Y-%m-%d %H:%M:%S&#x27;)</span><br><span class="line">        try:</span><br><span class="line">            await self._conn.execute(</span><br><span class="line">                &quot;INSERT OR IGNORE INTO download_history (post_title, download_date, source_feed) VALUES (?, ?, ?)&quot;,</span><br><span class="line">                (post_title, now, feed_title)</span><br><span class="line">            )</span><br><span class="line">            await self._conn.commit()</span><br><span class="line">        except Exception as e:</span><br><span class="line">            logger.error(&quot;添加记录 &#x27;%s&#x27; 到数据库失败: %s&quot;, post_title, e)</span><br><span class="line"></span><br><span class="line">    async def close(self):</span><br><span class="line">        if self._conn:</span><br><span class="line">            await self._conn.close()</span><br><span class="line">            logger.info(&quot;数据库连接已关闭。&quot;)</span><br><span class="line"></span><br><span class="line">class NetscapeCookieJar(aiohttp.CookieJar):</span><br><span class="line">    &quot;&quot;&quot;一个可以从 Netscape 格式的 cookies.txt 文件加载 cookie 的 CookieJar。&quot;&quot;&quot;</span><br><span class="line">    def __init__(self, cookie_file=None):</span><br><span class="line">        super().__init__()</span><br><span class="line">        if cookie_file and os.path.exists(cookie_file):</span><br><span class="line">            self.load_from_file(cookie_file)</span><br><span class="line"></span><br><span class="line">    def load_from_file(self, cookie_file):</span><br><span class="line">        try:</span><br><span class="line">            with open(cookie_file, &#x27;r&#x27;) as f:</span><br><span class="line">                for line in f:</span><br><span class="line">                    if line.strip().startswith(&#x27;#&#x27;) or not line.strip():</span><br><span class="line">                        continue</span><br><span class="line">                    </span><br><span class="line">                    try:</span><br><span class="line">                        domain, _, path, secure, expires, name, value = line.strip().split(&#x27;\t&#x27;)</span><br><span class="line">                        cookie = SimpleCookie()</span><br><span class="line">                        cookie[name] = value</span><br><span class="line">                        cookie[name][&#x27;path&#x27;] = path</span><br><span class="line">                        cookie[name][&#x27;domain&#x27;] = domain</span><br><span class="line">                        cookie[name][&#x27;expires&#x27;] = int(float(expires))</span><br><span class="line">                        cookie[name][&#x27;secure&#x27;] = secure.upper() == &#x27;TRUE&#x27;</span><br><span class="line">                        self.update_cookies(cookie)</span><br><span class="line">                    except ValueError:</span><br><span class="line">                        logger.warning(f&quot;无法解析Cookie行: &#123;line.strip()&#125;&quot;)</span><br><span class="line">                logger.info(f&quot;成功从 &#123;cookie_file&#125; 加载 Cookies。&quot;)</span><br><span class="line">        except Exception as e:</span><br><span class="line">            logger.error(f&quot;加载Cookies文件 &#123;cookie_file&#125; 失败: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 工具函数</span><br><span class="line"># ==============================================================================</span><br><span class="line">def sanitize_folder_name(name):</span><br><span class="line">    sanitized = html.unescape(name).strip()</span><br><span class="line">    invalid_chars = r&#x27;[\\/:*?&quot;&lt;&gt;|]&#x27;</span><br><span class="line">    sanitized = re.sub(invalid_chars, &#x27;_&#x27;, sanitized)</span><br><span class="line">    return sanitized or &quot;未命名&quot;</span><br><span class="line"></span><br><span class="line">def get_full_image_url(url):</span><br><span class="line">    if &quot;bp.blogspot.com&quot; in url or &quot;googleusercontent.com&quot; in url:</span><br><span class="line">        return REGEX[&quot;blogspot_thumb&quot;].sub(&#x27;/s0/&#x27;, url)</span><br><span class="line">    if REGEX[&quot;thumbnail_resize&quot;].search(url):</span><br><span class="line">        return REGEX[&quot;thumbnail_resize&quot;].sub(r&#x27;\1&#x27;, url)</span><br><span class="line">    return url</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 网络与下载核心 (异步)</span><br><span class="line"># ==============================================================================</span><br><span class="line">async def fetch(session, url, log_prefix=&quot;&quot;):</span><br><span class="line">    for attempt in range(CONFIG.get(&#x27;max_retries&#x27;, 3) + 1):</span><br><span class="line">        try:</span><br><span class="line">            async with session.get(url, timeout=CONFIG.get(&#x27;request_timeout&#x27;, 45), headers=CONFIG.get(&#x27;request_headers&#x27;, &#123;&#125;)) as response:</span><br><span class="line">                response.raise_for_status()</span><br><span class="line">                return await response.text()</span><br><span class="line">        except (aiohttp.ClientError, asyncio.TimeoutError) as e:</span><br><span class="line">            if attempt &lt; CONFIG.get(&#x27;max_retries&#x27;, 3):</span><br><span class="line">                delay = CONFIG.get(&#x27;retry_delay&#x27;, 2) * (2 ** attempt)</span><br><span class="line">                logger.warning(&quot;%s第 %d/%d 次抓取 %s 失败。将在 %.1f 秒后重试...&quot;, log_prefix, attempt + 1, CONFIG.get(&#x27;max_retries&#x27;, 3) + 1, url, delay)</span><br><span class="line">                await asyncio.sleep(delay)</span><br><span class="line">            else:</span><br><span class="line">                logger.error(&quot;%s抓取 %s 在 %d 次重试后仍然失败: %s&quot;, log_prefix, url, CONFIG.get(&#x27;max_retries&#x27;, 3) + 1, e)</span><br><span class="line">                return None</span><br><span class="line"></span><br><span class="line">async def download_image(session, img_url, filepath, referer_url, log_prefix=&quot;&quot;):</span><br><span class="line">    &quot;&quot;&quot;异步下载单张图片，并在失败时记录详细错误。&quot;&quot;&quot;</span><br><span class="line">    full_img_url = get_full_image_url(img_url)</span><br><span class="line">    headers = CONFIG.get(&#x27;image_headers&#x27;, &#123;&#125;).copy()</span><br><span class="line">    headers[&#x27;Referer&#x27;] = referer_url</span><br><span class="line">    last_exception = None</span><br><span class="line"></span><br><span class="line">    for attempt in range(CONFIG.get(&#x27;max_retries&#x27;, 3) + 1):</span><br><span class="line">        try:</span><br><span class="line">            async with session.get(full_img_url, timeout=CONFIG.get(&#x27;request_timeout&#x27;, 45), headers=headers) as response:</span><br><span class="line">                if response.status == 404 and full_img_url != img_url:</span><br><span class="line">                    logger.warning(&quot;%s高清图URL %s 返回404，尝试原始URL: %s&quot;, log_prefix, full_img_url, img_url)</span><br><span class="line">                    return await download_image(session, img_url, filepath, referer_url, log_prefix)</span><br><span class="line">                </span><br><span class="line">                response.raise_for_status()</span><br><span class="line">                </span><br><span class="line">                content = await response.read()</span><br><span class="line">                os.makedirs(os.path.dirname(filepath), exist_ok=True)</span><br><span class="line">                with open(filepath, &#x27;wb&#x27;) as f:</span><br><span class="line">                    f.write(content)</span><br><span class="line">                return True, os.path.basename(filepath)</span><br><span class="line"></span><br><span class="line">        except (aiohttp.ClientError, asyncio.TimeoutError) as e:</span><br><span class="line">            last_exception = e</span><br><span class="line">            if attempt &lt; CONFIG.get(&#x27;max_retries&#x27;, 3):</span><br><span class="line">                delay = CONFIG.get(&#x27;retry_delay&#x27;, 5) * (2 ** attempt)</span><br><span class="line">                await asyncio.sleep(delay)</span><br><span class="line">            else:</span><br><span class="line">                # 最终失败时记录详细错误</span><br><span class="line">                error_message = f&quot;重试 &#123;CONFIG.get(&#x27;max_retries&#x27;, 3) + 1&#125; 次后失败。URL: &#123;img_url&#125;&quot;</span><br><span class="line">                logger.error(&quot;%s%s, 底层错误: %s&quot;, log_prefix, error_message, last_exception, exc_info=False)</span><br><span class="line">                return False, str(last_exception)</span><br><span class="line">    return False, &quot;已达最大重试次数&quot;</span><br><span class="line"></span><br><span class="line">async def fetch_paginated_content(session, url, log_prefix=&quot;&quot;):</span><br><span class="line">    &quot;&quot;&quot;异步获取一个分页文章的所有页面HTML内容。&quot;&quot;&quot;</span><br><span class="line">    full_html = &quot;&quot;</span><br><span class="line">    current_url = url</span><br><span class="line">    processed_urls = set()</span><br><span class="line">    while current_url and current_url not in processed_urls:</span><br><span class="line">        logger.debug(&quot;%s正在抓取分页内容: %s&quot;, log_prefix, current_url)</span><br><span class="line">        processed_urls.add(current_url)</span><br><span class="line">        html_content = await fetch(session, current_url, log_prefix)</span><br><span class="line">        if not html_content:</span><br><span class="line">            break</span><br><span class="line">        soup = BeautifulSoup(html_content, &#x27;html.parser&#x27;)</span><br><span class="line">        content_area = soup.select_one(&#x27;div.entry-content, div.post-content, article.post, div#content&#x27;)</span><br><span class="line">        if content_area:</span><br><span class="line">            full_html += str(content_area)</span><br><span class="line">        else:</span><br><span class="line">            full_html += html_content</span><br><span class="line">        next_page_link = soup.select_one(&#x27;a.next.page-numbers, a[rel=next], .pagination-next a, a:-soup-contains(&quot;Next Page&quot;)&#x27;)</span><br><span class="line">        if next_page_link and next_page_link.get(&#x27;href&#x27;):</span><br><span class="line">            current_url = urljoin(current_url, next_page_link[&#x27;href&#x27;])</span><br><span class="line">            await asyncio.sleep(random.uniform(0.5, 2.0)) # 抓取分页时也增加随机延迟</span><br><span class="line">        else:</span><br><span class="line">            current_url = None</span><br><span class="line">    return full_html</span><br><span class="line">    </span><br><span class="line">async def extract_images_from_page(session, article_url, log_prefix=&quot;&quot;):</span><br><span class="line">    &quot;&quot;&quot;(更精确版) 从一个可能分页的文章中提取所有图片URL。&quot;&quot;&quot;</span><br><span class="line">    full_html_content = await fetch_paginated_content(session, article_url, log_prefix)</span><br><span class="line">    if not full_html_content:</span><br><span class="line">        return []</span><br><span class="line">        </span><br><span class="line">    soup = BeautifulSoup(full_html_content, &#x27;html.parser&#x27;)</span><br><span class="line">    image_urls = set()</span><br><span class="line">    content_area = soup.select_one(&#x27;div.entry-content, div.post-content, article.post, div#content&#x27;)</span><br><span class="line">    search_area = content_area if content_area else soup</span><br><span class="line"></span><br><span class="line">    for img in search_area.find_all(&#x27;img&#x27;):</span><br><span class="line">        src = img.get(&#x27;data-src&#x27;) or img.get(&#x27;src&#x27;)</span><br><span class="line">        if src:</span><br><span class="line">            full_url = urljoin(article_url, src.strip())</span><br><span class="line">            if REGEX[&quot;image_file_ext&quot;].search(full_url.split(&#x27;?&#x27;)[0]):</span><br><span class="line">                image_urls.add(full_url)</span><br><span class="line">    </span><br><span class="line">    return list(image_urls)</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 主要处理逻辑 (异步)</span><br><span class="line"># ==============================================================================</span><br><span class="line">async def process_entry(session, db, entry, feed_title):</span><br><span class="line">    &quot;&quot;&quot;处理单个 RSS 条目，并记录下载失败 (基于文章标题全局去重)。&quot;&quot;&quot;</span><br><span class="line">    entry_id = getattr(entry, &#x27;id&#x27;, entry.link)</span><br><span class="line">    article_url = entry.link</span><br><span class="line">    log_prefix = f&quot;[&#123;feed_title[:15]&#125;] &quot;</span><br><span class="line"></span><br><span class="line">    # 1. 首先获取并清理标题</span><br><span class="line">    post_title = sanitize_folder_name(entry.title)</span><br><span class="line"></span><br><span class="line">    # 2. 使用清理后的标题进行全局重复检查</span><br><span class="line">    if not article_url or await db.is_downloaded(post_title):</span><br><span class="line">        if not article_url:</span><br><span class="line">            return 0, 0</span><br><span class="line">        logger.info(&quot;%s文章 &#x27;%s&#x27; 已在全局历史中存在，跳过。&quot;, log_prefix, post_title)</span><br><span class="line">        return 0, 0</span><br><span class="line">    </span><br><span class="line">    # 如果没跳过，说明是新文章，继续处理</span><br><span class="line">    logger.info(&quot;%s处理新文章: &#x27;%s&#x27;&quot;, log_prefix, post_title)</span><br><span class="line"></span><br><span class="line">    image_urls = []</span><br><span class="line">    html_description = getattr(entry, &#x27;description&#x27;, &#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">    if html_description:</span><br><span class="line">        soup = BeautifulSoup(html_description, &#x27;html.parser&#x27;)</span><br><span class="line">        gallery_div = soup.select_one(&#x27;div.gallery, div#gallery&#x27;)</span><br><span class="line">        if gallery_div:</span><br><span class="line">            links = gallery_div.select(&#x27;a&#x27;)</span><br><span class="line">            for link in links:</span><br><span class="line">                href = link.get(&#x27;href&#x27;)</span><br><span class="line">                if href and REGEX[&quot;image_file_ext&quot;].search(href.split(&#x27;?&#x27;)[0]):</span><br><span class="line">                    image_urls.append(urljoin(article_url, href.strip()))</span><br><span class="line">        </span><br><span class="line">        if not image_urls:</span><br><span class="line">            for img in soup.find_all(&#x27;img&#x27;):</span><br><span class="line">                src = img.get(&#x27;src&#x27;) or img.get(&#x27;data-src&#x27;)</span><br><span class="line">                if src:</span><br><span class="line">                    image_urls.append(urljoin(article_url, src.strip()))</span><br><span class="line"></span><br><span class="line">    if not image_urls and CONFIG.get(&#x27;allow_fallback_to_source_site&#x27;, False):</span><br><span class="line">        logger.warning(&quot;%s在RSS源中未找到图片，将访问源网站: %s&quot;, log_prefix, article_url)</span><br><span class="line">        image_urls = await extract_images_from_page(session, article_url, log_prefix)</span><br><span class="line">    elif image_urls:</span><br><span class="line">        unique_urls = list(dict.fromkeys(image_urls))</span><br><span class="line">        image_urls = unique_urls</span><br><span class="line">        logger.info(&quot;%s已成功从RSS源描述中提取 %d 个图片地址。&quot;, log_prefix, len(image_urls))</span><br><span class="line"></span><br><span class="line">    if not image_urls:</span><br><span class="line">        logger.warning(&quot;%s文章 &#x27;%s&#x27; 未能找到任何图片。&quot;, log_prefix, post_title)</span><br><span class="line">        # 将标题添加到数据库</span><br><span class="line">        await db.add_entry(post_title, feed_title)</span><br><span class="line">        return 1, 0</span><br><span class="line"></span><br><span class="line">    post_folder = os.path.join(CONFIG[&#x27;base_folder&#x27;], sanitize_folder_name(feed_title), post_title)</span><br><span class="line">    extended_log_prefix = f&quot;[&#123;feed_title&#125;][&#123;post_title&#125;] &quot;</span><br><span class="line"></span><br><span class="line">    tasks = []</span><br><span class="line">    for i, img_url in enumerate(image_urls):</span><br><span class="line">        ext = os.path.splitext(urlparse(img_url).path)[1]</span><br><span class="line">        if not REGEX[&quot;image_file_ext&quot;].search(ext):</span><br><span class="line">            ext = &quot;.jpg&quot;</span><br><span class="line">        filename = f&quot;&#123;i+1:03d&#125;&#123;ext&#125;&quot;</span><br><span class="line">        filepath = os.path.join(post_folder, filename)</span><br><span class="line"></span><br><span class="line">        if not os.path.exists(filepath):</span><br><span class="line">            task = asyncio.create_task(download_image(session, img_url, filepath, article_url, extended_log_prefix))</span><br><span class="line">            tasks.append(task)</span><br><span class="line">        else:</span><br><span class="line">            await asyncio.sleep(0.05)</span><br><span class="line"></span><br><span class="line">    if not tasks:</span><br><span class="line">        logger.info(&quot;%s所有 %d 张图片均已存在，跳过下载。&quot;, extended_log_prefix, len(image_urls))</span><br><span class="line">        # 将标题添加到数据库</span><br><span class="line">        await db.add_entry(post_title, feed_title)</span><br><span class="line">        return 1, 0</span><br><span class="line"></span><br><span class="line">    # 使用 asyncio.as_completed 来逐个处理下载任务，并加入随机延时</span><br><span class="line">    success_count = 0</span><br><span class="line">    pbar = aio_tqdm(total=len(tasks), desc=f&quot;&#123;log_prefix&#125;下载 &#x27;&#123;post_title[:20]&#125;…&#x27;&quot;, unit=&quot;张&quot;, leave=False)</span><br><span class="line">    for task in asyncio.as_completed(tasks):</span><br><span class="line">        result, _ = await task</span><br><span class="line">        if result:</span><br><span class="line">            success_count += 1</span><br><span class="line">        pbar.update(1)</span><br><span class="line">        # 关键优化：在每次下载后都加入一个随机的短暂延时</span><br><span class="line">        await asyncio.sleep(random.uniform(0.5, 1.5))</span><br><span class="line">    pbar.close()</span><br><span class="line">    </span><br><span class="line">    failed_count = len(tasks) - success_count</span><br><span class="line"></span><br><span class="line">    if failed_count == 0:</span><br><span class="line">        logger.info(&quot;%s成功为 &#x27;%s&#x27; 下载 %d 张新图片。&quot;, log_prefix, post_title, success_count)</span><br><span class="line">    else:</span><br><span class="line">        logger.error(&quot;%s&#x27;%s&#x27; 下载完成，%d 张成功, %d 张失败。详情请查看错误日志文件。&quot;, log_prefix, post_title, success_count, failed_count)</span><br><span class="line">        </span><br><span class="line">    # 将标题添加到数据库</span><br><span class="line">    await db.add_entry(post_title, feed_title)</span><br><span class="line">    return 1, success_count</span><br><span class="line"></span><br><span class="line">async def process_feed(session, db, feed_info):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    处理单个 RSS 订阅源。</span><br><span class="line">    优先尝试正常解析，如果因内容非XML而失败，则自动使用浏览器User-Agent重试。</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    feed_title, feed_url = feed_info</span><br><span class="line">    log_prefix = f&quot;[&#123;feed_title&#125;] &quot;</span><br><span class="line">    logger.info(&quot;%s开始处理...&quot;, log_prefix)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        # --- 步骤 1: 首次尝试，不带任何伪装 ---</span><br><span class="line">        feed_data = await asyncio.to_thread(feedparser.parse, feed_url)</span><br><span class="line"></span><br><span class="line">        # --- 步骤 2: 检查首次尝试是否因“反爬虫”失败 ---</span><br><span class="line">        if feed_data.bozo and isinstance(feed_data.bozo_exception, feedparser.NonXMLContentType):</span><br><span class="line">            logger.warning(&quot;%s首次尝试失败，服务器返回了HTML页面。正在切换伪装模式重试...&quot;, log_prefix)</span><br><span class="line">            </span><br><span class="line">            # --- 步骤 3: 切换为伪装模式进行重试 ---</span><br><span class="line">            agent = CONFIG.get(&#x27;request_headers&#x27;, &#123;&#125;).get(&#x27;User-Agent&#x27;, &#x27;Mozilla/5.0&#x27;)</span><br><span class="line">            feed_data = await asyncio.to_thread(feedparser.parse, feed_url, agent=agent)</span><br><span class="line"></span><br><span class="line">        # --- 步骤 4: 检查最终结果 ---</span><br><span class="line">        if feed_data.bozo:</span><br><span class="line">            logger.warning(&quot;%s订阅源可能格式错误或无法访问: %s. 错误: %s&quot;, log_prefix, feed_url, feed_data.bozo_exception)</span><br><span class="line">        </span><br><span class="line">        # 后续逻辑保持不变</span><br><span class="line">        entry_tasks = [process_entry(session, db, entry, feed_title) for entry in feed_data.entries]</span><br><span class="line">        results = await asyncio.gather(*entry_tasks)</span><br><span class="line">        </span><br><span class="line">        total_new_entries = sum(r[0] for r in results)</span><br><span class="line">        total_new_images = sum(r[1] for r in results)</span><br><span class="line"></span><br><span class="line">        logger.info(&quot;%s处理完毕。发现 %d 篇新文章，下载了 %d 张新图片。&quot;, log_prefix, total_new_entries, total_new_images)</span><br><span class="line">        return total_new_entries, total_new_images</span><br><span class="line">        </span><br><span class="line">    except Exception as e:</span><br><span class="line">        logger.error(&quot;%s处理时发生意外错误: %s&quot;, log_prefix, e, exc_info=True)</span><br><span class="line">        return 0, 0</span><br><span class="line"></span><br><span class="line">async def main():</span><br><span class="line">    &quot;&quot;&quot;异步主函数，运行下载器。&quot;&quot;&quot;</span><br><span class="line">    load_config()</span><br><span class="line"></span><br><span class="line">    os.makedirs(CONFIG[&#x27;base_folder&#x27;], exist_ok=True)</span><br><span class="line">    db_path = os.path.join(CONFIG[&#x27;base_folder&#x27;], CONFIG[&#x27;db_file&#x27;])</span><br><span class="line">    db = DatabaseManager(db_path)</span><br><span class="line">    await db.connect()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        # 如果配置了cookie文件则加载，否则忽略</span><br><span class="line">        cookie_file = CONFIG.get(&#x27;cookie_file&#x27;)</span><br><span class="line">        if cookie_file and not os.path.exists(cookie_file):</span><br><span class="line">            logger.warning(f&quot;配置了cookie文件 &#x27;&#123;cookie_file&#125;&#x27; 但文件不存在，将不加载Cookie。&quot;)</span><br><span class="line">            cookie_jar = aiohttp.CookieJar()</span><br><span class="line">        else:</span><br><span class="line">            cookie_jar = NetscapeCookieJar(cookie_file)</span><br><span class="line"></span><br><span class="line">        connector = aiohttp.TCPConnector(limit_per_host=CONFIG.get(&#x27;max_concurrent_downloads&#x27;, 8))</span><br><span class="line">        </span><br><span class="line">        async with aiohttp.ClientSession(connector=connector, cookie_jar=cookie_jar) as session:</span><br><span class="line">            with open(CONFIG[&#x27;opml_file&#x27;], &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">                opml_data = f.read()</span><br><span class="line">            </span><br><span class="line">            opml_soup = BeautifulSoup(opml_data, &#x27;xml&#x27;)</span><br><span class="line">            all_feeds = [</span><br><span class="line">                (outline.get(&#x27;text&#x27;, &#x27;未命名源&#x27;), outline.get(&#x27;xmlUrl&#x27;))</span><br><span class="line">                for outline in opml_soup.find_all(&#x27;outline&#x27;) if outline.get(&#x27;xmlUrl&#x27;)</span><br><span class="line">            ]</span><br><span class="line">            feeds_to_process = [f for f in all_feeds if f[0] not in CONFIG.get(&#x27;skip_feeds&#x27;, [])]</span><br><span class="line">            logger.info(&quot;在 %s 中发现 %d 个订阅源。将处理 %d 个。&quot;, CONFIG[&#x27;opml_file&#x27;], len(all_feeds), len(feeds_to_process))</span><br><span class="line"></span><br><span class="line">            stats = &#123;&#x27;new_entries&#x27;: 0, &#x27;new_images&#x27;: 0&#125;</span><br><span class="line">            </span><br><span class="line">            semaphore = asyncio.Semaphore(CONFIG.get(&#x27;max_concurrent_feeds&#x27;, 4))</span><br><span class="line">            </span><br><span class="line">            async def run_with_semaphore(feed_info):</span><br><span class="line">                async with semaphore:</span><br><span class="line">                    return await process_feed(session, db, feed_info)</span><br><span class="line"></span><br><span class="line">            feed_tasks = [run_with_semaphore(feed) for feed in feeds_to_process]</span><br><span class="line">            </span><br><span class="line">            for future in aio_tqdm.as_completed(feed_tasks, total=len(feed_tasks), desc=&quot;处理订阅源&quot;, unit=&quot;个&quot;):</span><br><span class="line">                new_entries, new_images = await future</span><br><span class="line">                stats[&#x27;new_entries&#x27;] += new_entries</span><br><span class="line">                stats[&#x27;new_images&#x27;] += new_images</span><br><span class="line"></span><br><span class="line">            logger.info(&quot;=&quot; * 60)</span><br><span class="line">            logger.info(&quot;所有订阅源处理完毕。&quot;)</span><br><span class="line">            logger.info(&quot;总计处理新文章: %d 篇&quot;, stats[&#x27;new_entries&#x27;])</span><br><span class="line">            logger.info(&quot;总计下载新图片: %d 张&quot;, stats[&#x27;new_images&#x27;])</span><br><span class="line">            logger.info(&quot;数据库位于: %s&quot;, os.path.abspath(db_path))</span><br><span class="line">            logger.info(&quot;=&quot; * 60)</span><br><span class="line"></span><br><span class="line">    except FileNotFoundError as e:</span><br><span class="line">        logger.error(&quot;未找到关键文件: %s&quot;, e)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        logger.critical(&quot;主程序发生严重错误: %s&quot;, e, exc_info=True)</span><br><span class="line">    finally:</span><br><span class="line">        await db.close()</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    parser = argparse.ArgumentParser(</span><br><span class="line">        description=&#x27;异步 RSS 图片下载器 (最终优化版 - 模拟人类行为)&#x27;,</span><br><span class="line">        formatter_class=argparse.RawTextHelpFormatter</span><br><span class="line">    )</span><br><span class="line">    parser.add_argument(&#x27;--daemon&#x27;, action=&#x27;store_true&#x27;, help=&#x27;以守护进程模式运行，按固定间隔重复执行。&#x27;)</span><br><span class="line">    parser.add_argument(</span><br><span class="line">        &#x27;--interval&#x27;, </span><br><span class="line">        type=int, </span><br><span class="line">        default=7200, </span><br><span class="line">        help=&#x27;守护进程模式下的检查间隔（秒）。\n默认值: 7200 (2小时)。&#x27;</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    if not args.daemon:</span><br><span class="line">        try:</span><br><span class="line">            asyncio.run(main())</span><br><span class="line">        except KeyboardInterrupt:</span><br><span class="line">            logger.info(&quot;用户中断了程序。正在关闭...&quot;)</span><br><span class="line">    else:</span><br><span class="line">        logger.info(f&quot;守护进程模式已启动，运行间隔为 &#123;args.interval&#125; 秒 (&#123;args.interval / 3600:.1f&#125; 小时)。&quot;)</span><br><span class="line">        while True:</span><br><span class="line">            start_time = time.time()</span><br><span class="line">            try:</span><br><span class="line">                logger.info(&quot;开始新一轮的检查与下载...&quot;)</span><br><span class="line">                asyncio.run(main())</span><br><span class="line">            except KeyboardInterrupt:</span><br><span class="line">                logger.info(&quot;守护进程被用户中断。正在退出...&quot;)</span><br><span class="line">                break</span><br><span class="line">            except Exception as e:</span><br><span class="line">                logger.critical(f&quot;守护进程在执行任务时发生严重错误: &#123;e&#125;&quot;, exc_info=True)</span><br><span class="line">            </span><br><span class="line">            end_time = time.time()</span><br><span class="line">            elapsed = end_time - start_time</span><br><span class="line">            sleep_time = max(60, args.interval - elapsed)</span><br><span class="line">            </span><br><span class="line">            next_run_time_str = time.strftime(&#x27;%Y-%m-%d %H:%M:%S&#x27;, time.localtime(time.time() + sleep_time))</span><br><span class="line">            logger.info(f&quot;本轮任务执行完毕，耗时 &#123;elapsed:.1f&#125; 秒。将在 &#123;sleep_time:.1f&#125; 秒后开始下一轮（预计时间: &#123;next_run_time_str&#125;）。&quot;)</span><br><span class="line">            time.sleep(sleep_time)</span><br></pre></td></tr></table></figure>
+
+<h2 id="⚙️-配置文件"><a href="#⚙️-配置文件" class="headerlink" title="⚙️ 配置文件"></a>⚙️ 配置文件</h2><p><code>config.yaml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"># ==============================================================================</span><br><span class="line"># 通用设置</span><br><span class="line"># ==============================================================================</span><br><span class="line"># 所有下载内容的根目录</span><br><span class="line">base_folder: &quot;photos&quot;</span><br><span class="line"># 数据库文件名 (将在根目录内创建)</span><br><span class="line">db_file: &quot;history.db&quot;</span><br><span class="line"># 包含 RSS 订阅源的 OPML 文件</span><br><span class="line">opml_file: &quot;feeds.opml&quot;</span><br><span class="line"># 用于存储错误和失败记录的日志文件</span><br><span class="line">error_log_file: &quot;downloader_errors.log&quot;</span><br><span class="line"># 需要跳过处理的订阅源标题列表</span><br><span class="line">skip_feeds:</span><br><span class="line">  - &quot;示例：需要跳过的订阅源&quot;</span><br><span class="line"></span><br><span class="line"># 是否允许在RSS内容为空时，回退到访问原始网站链接。</span><br><span class="line"># 对于内容完整的RSS源，强烈建议设为 false，可以根除抓取到网站推荐图的问题。</span><br><span class="line"># 如果有一些只提供摘要的RSS源，则需要设为 true。</span><br><span class="line">allow_fallback_to_source_site: false</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 并发与延迟设置</span><br><span class="line"># ==============================================================================</span><br><span class="line"># 同时处理的订阅源最大数量</span><br><span class="line">max_concurrent_feeds: 1</span><br><span class="line"># 每个条目同时下载图片的最大数量</span><br><span class="line">max_concurrent_downloads: 8</span><br><span class="line"># 通用网络请求超时时间 (秒)</span><br><span class="line">request_timeout: 45</span><br><span class="line"># 失败后重试的基础延迟时间 (秒)</span><br><span class="line">retry_delay: 10</span><br><span class="line"># 单个请求失败后的最大重试次数</span><br><span class="line">max_retries: 10</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 网络请求头</span><br><span class="line"># ==============================================================================</span><br><span class="line"># 用于抓取 RSS 和 HTML 页面的请求头</span><br><span class="line">request_headers:</span><br><span class="line">  User-Agent: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36&quot;</span><br><span class="line">  Accept: &quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&quot;</span><br><span class="line">  Accept-Language: &quot;en-US,en;q=0.9,zh-CN;q=0.8&quot;</span><br><span class="line"></span><br><span class="line"># 用于下载图片的请求头</span><br><span class="line">image_headers:</span><br><span class="line">  User-Agent: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36&quot;</span><br><span class="line">  Accept: &quot;image/webp,image/apng,image/*,*/*;q=0.8&quot;</span><br><span class="line"></span><br><span class="line"># ==============================================================================</span><br><span class="line"># 文件夹与文件名规则</span><br><span class="line"># ==============================================================================</span><br><span class="line">folder_name_rules:</span><br><span class="line">  max_length: 150</span><br><span class="line">  # 需要被替换的特殊字符</span><br><span class="line">  replace_chars:</span><br><span class="line">    &#x27;[&#x27;: &#x27;【&#x27;</span><br><span class="line">    &#x27;]&#x27;: &#x27;】&#x27;</span><br><span class="line">    &#x27;:&#x27;: &#x27;：&#x27;</span><br><span class="line">    &#x27;*&#x27;: &#x27;＊&#x27;</span><br><span class="line">    &#x27;?&#x27;: &#x27;？&#x27;</span><br><span class="line">    &#x27;&quot;&#x27;: &#x27;“&#x27;</span><br><span class="line">    &#x27;&lt;&#x27;: &#x27;＜&#x27;</span><br><span class="line">    &#x27;&gt;&#x27;: &#x27;＞&#x27;</span><br><span class="line">    &#x27;|&#x27;: &#x27;｜&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="📡-演示RSS源"><a href="#📡-演示RSS源" class="headerlink" title="📡 演示RSS源"></a>📡 演示RSS源</h2><p><code>feeds.opml</code> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;opml version=&quot;2.0&quot;&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;title&gt;My RSS Feeds&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;outline text=&quot;🖼️图片画廊&quot;&gt;</span><br><span class="line">      &lt;outline text=&quot;80K - 写真网&quot; type=&quot;rss&quot; xmlUrl=&quot;https://127.0.0.1&quot; htmlUrl=&quot;https://127.0.0.1&quot;/&gt;</span><br><span class="line">    &lt;/outline&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/opml&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="🔗-脚本依赖"><a href="#🔗-脚本依赖" class="headerlink" title="🔗 脚本依赖"></a>🔗 脚本依赖</h2><p><code>requirements.txt</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">aiohttp[cchardet,aiodns]</span><br><span class="line">aiosqlite</span><br><span class="line">beautifulsoup4</span><br><span class="line">feedparser</span><br><span class="line">PyYAML</span><br><span class="line">tqdm</span><br><span class="line">lxm</span><br></pre></td></tr></table></figure>
+
+<h2 id="🚀-安装与设置"><a href="#🚀-安装与设置" class="headerlink" title="🚀 安装与设置"></a>🚀 安装与设置</h2><h4 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1. 环境准备"></a>1. 环境准备</h4><p>安装 <strong>Python</strong> </p>
+<h4 id="2-获取文件"><a href="#2-获取文件" class="headerlink" title="2. 获取文件"></a>2. 获取文件</h4><p>把创建的所有文件 (<code>.py</code>, <code>.yaml</code>, <code>feeds.opml</code>,<code>.txt</code>) 并将它们放在同一个文件夹中。</p>
+<h4 id="3-安装依赖"><a href="#3-安装依赖" class="headerlink" title="3. 安装依赖"></a>3. 安装依赖</h4><p>进入项目所在的文件夹，打开终端 ，然后运行以下命令来安装所有必需的 Python 库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>主要依赖库包括</strong>: <code>aiohttp</code>, <code>aiosqlite</code>, <code>beautifulsoup4</code>, <code>feedparser</code>, <code>pyyaml</code>, <code>tqdm</code>, <code>lxm</code>。</p>
+<h2 id="⚙️-配置说明"><a href="#⚙️-配置说明" class="headerlink" title="⚙️ 配置说明"></a>⚙️ 配置说明</h2><h4 id="1-配置订阅源-feeds-opml"><a href="#1-配置订阅源-feeds-opml" class="headerlink" title="1. 配置订阅源 (feeds.opml)"></a>1. 配置订阅源 (<code>feeds.opml</code>)</h4><p>最关键的一步。从RSS 阅读器（如 Feedly, Inoreader, Freshrss 等）中，将您的订阅源导出为 OPML 文件格式。将导出的文件命名为 <code>feeds.opml</code> 并放入项目文件夹。</p>
+<blockquote>
+<p><strong>提示</strong>: 请确保导出的 OPML 文件是 UTF-8 编码，以避免解析错误。</p>
+</blockquote>
+<h4 id="2-调整主配置-config-yaml"><a href="#2-调整主配置-config-yaml" class="headerlink" title="2. 调整主配置 (config.yaml)"></a>2. 调整主配置 (<code>config.yaml</code>)</h4><p>打开 <code>config.yaml</code> 文件，根据里面的中文注释修改配置项。最重要的几项是：</p>
+<ul>
+<li><code>base_folder</code>: 图片保存的目录。</li>
+<li><strong>反爬虫策略相关</strong>:<ul>
+<li><code>max_concurrent_feeds</code>: 同时处理的网站（订阅源）数量。<strong>建议首次运行或遇到频繁失败时设为 <code>1</code></strong>。</li>
+<li><code>max_concurrent_downloads</code>: 同时下载的图片数量。<strong>建议设为 <code>1</code> 到 <code>8</code> 之间，数值越小越不容易被封锁</strong>。</li>
+<li><code>retry_delay</code>: 每次重试的基础等待时间（秒）。<strong>如果频繁失败，可以适当增加此值，例如 <code>10</code></strong>。</li>
+</ul>
+</li>
+<li><code>(可选) Cookie 配置</code>:<ul>
+<li><code>cookie_file</code>: 如果要下载登录后才能访问的内容，可以在此指定 <code>cookies.txt</code> 文件的路径。</li>
+</ul>
+</li>
+</ul>
+<h2 id="▶️-如何使用"><a href="#▶️-如何使用" class="headerlink" title="▶️ 如何使用"></a>▶️ 如何使用</h2><h4 id="首次运行建议"><a href="#首次运行建议" class="headerlink" title="首次运行建议"></a>首次运行建议</h4><ol>
+<li>将 <code>config.yaml</code> 中的 <code>max_concurrent_feeds</code> 和 <code>max_concurrent_downloads</code> 都设置为 <code>1</code>。</li>
+<li>运行脚本进行测试。</li>
+<li>如果下载稳定，再逐步调高并发数，找到速度和稳定性的平衡点。</li>
+</ol>
+<h4 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h4><p>完成所有配置后，在终端中进入项目文件夹，运行以下命令即可启动脚本：</p>
+<p><strong>1. 标准模式：</strong> (运行一次后自动退出)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python downloader.py</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 守护进程模式：</strong> (使用默认的2小时间隔，在后台持续运行)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python downloader.py --daemon</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 守护进程模式 + 自定义间隔：</strong> (每30分钟检查一次)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python downloader.py --daemon --interval 1800</span><br></pre></td></tr></table></figure>
+
+<p>脚本将开始读取 <code>feeds.opml</code>，检查数据库历史记录，并下载所有新的图集。您可以在控制台看到详细的进度和日志。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/04/17/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%B3%A8%E5%86%8C%E4%BA%92%E8%81%94%E7%BD%91%E8%B4%A6%E5%8F%B7/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2025-06-28 04:23:53
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Python/" title="Python">
+                        #Python
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">⚠️ 注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%81-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text">📁 文件结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%90%8D-%E4%B8%BB%E7%A8%8B%E5%BA%8F"><span class="toc-text">🐍 主程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">⚙️ 配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%A1-%E6%BC%94%E7%A4%BARSS%E6%BA%90"><span class="toc-text">📡 演示RSS源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%97-%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"><span class="toc-text">🔗 脚本依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%AE%BE%E7%BD%AE"><span class="toc-text">🚀 安装与设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-text">1. 环境准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-text">2. 获取文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="toc-text">3. 安装依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">⚙️ 配置说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E8%AE%A2%E9%98%85%E6%BA%90-feeds-opml"><span class="toc-text">1. 配置订阅源 (feeds.opml)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%B0%83%E6%95%B4%E4%B8%BB%E9%85%8D%E7%BD%AE-config-yaml"><span class="toc-text">2. 调整主配置 (config.yaml)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%96%B6%EF%B8%8F-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-text">▶️ 如何使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A6%96%E6%AC%A1%E8%BF%90%E8%A1%8C%E5%BB%BA%E8%AE%AE"><span class="toc-text">首次运行建议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">启动命令</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a href="/">© 2025 Ｘ小站</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+
+
+        
+
+      </div>
+    </div>
+  
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body>
+</html>
