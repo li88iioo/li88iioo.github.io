@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta name="msvalidate.01" content="7C83127B56F4119905E6D0B167D8128F" />
+  <meta name="google-site-verification" content="ngKFKPTfonxvT8-y3gLrg9i03a0c7oKkL_EaN6gb0dc" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="No Name" />
+  <!-- Open Graph Description 简短摘要-->
+  
+      <!-- 用于搜索引擎的文章摘要 -->
+      
+          <meta name="description" content="留档一些则腾笔记" />
+          
+            
+                
+                  <title>
+                    
+                      记录一下在小米万兆路由器上安装 Entware
+                        
+                              
+                                    |
+                                    
+                                      Ｘ小站
+                  </title>
+
+                  
+                    <link rel="apple-touch-icon" href="/images/favicon.svg">
+                    <link rel="icon" href="/images/favicon.svg">
+                    
+
+                      <!-- Raleway-Font -->
+                      <!-- 
+  <link href="https://fonts.googleapis.com/css?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  -->
+
+
+                      <!-- hexo site css -->
+                      <link rel="stylesheet" href="/css/main.css" />
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+                      <!-- 代码块风格 -->
+                      
+                        
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+                          
+
+                            <!-- jquery3.3.1 -->
+                            
+                                <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+                                
+
+                                  <!-- fancybox -->
+                                  
+                                      <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+                                      <script defer type="text/javascript"
+                                        src="/plugins/jquery.fancybox.min.js"></script>
+                                      
+                                        
+<script src="/js/fancybox.js"></script>
+
+
+                                          
+
+                                              
+
+                                                  <script>
+                                                    var html = document.documentElement
+                                                    const colorMode = localStorage.getItem('color-mode')
+                                                    if (colorMode) {
+                                                      document.documentElement.setAttribute('color-mode', colorMode)
+                                                    }
+                                                  </script>
+
+                                                  
+                                                    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img no-lazy src="/images/logo.svg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/"></a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/notes/">
+          <a href="/notes/">笔记</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">记录一下在小米万兆路由器上安装 Entware</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2025-03-29 15:53:53
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Openwrt/" title="Openwrt">
+                    #Openwrt
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><strong>前言：</strong></p>
+<p>Entware 是一个适用于嵌入式设备的软件包管理器，可以让你方便地安装各种软件，例如 <code>nano</code>、<code>htop</code>、<code>aria2</code> 等，扩展路由器的功能。</p>
+<p><strong>重要提示：</strong></p>
+<ul>
+<li><strong>刷机有风险，请务必备份路由器固件！</strong> 如果操作不当，可能会导致路由器变砖。 强烈建议在进行任何操作之前备份当前的路由器固件。</li>
+<li><strong>小米官方固件默认不支持 Entware，刷入需要解锁SSH</strong> 本教程以假设你已经解锁了 SSH 。</li>
+<li><strong>不同固件版本可能会有差异，请根据你的实际情况进行调整。</strong> 仔细阅读你的固件文档，并根据实际情况进行修改。</li>
+<li><strong>本教程使用外接存储设备（U 盘或移动硬盘）来存储 Entware 软件包。</strong> 建议使用 USB 3.0 的存储设备以获得更好的性能。</li>
+</ul>
+<p><strong>准备工作：</strong></p>
+<ol>
+<li><strong>小米万兆路由器：</strong> 已经解锁 SSH 。</li>
+<li><strong>外接存储设备：</strong> U 盘或移动硬盘，建议 100GB 左右，格式化为 ext4 格式。 确保你的存储设备有足够的空间。</li>
+<li><strong>SSH 客户端：</strong> 例如 PuTTY (Windows) 或 Terminal (macOS&#x2F;Linux)。</li>
+<li><strong>稳定的网络连接：</strong> 安装过程需要下载软件包，需要稳定的网络连接。</li>
+</ol>
+<p><strong>步骤：</strong></p>
+<ol>
+<li><p><strong>启用 SSH：</strong></p>
+<ul>
+<li>解锁方法自行搜索。</li>
+</ul>
+</li>
+<li><p><strong>连接到路由器 SSH：</strong></p>
+<ul>
+<li>使用 SSH 客户端软件。</li>
+<li>输入路由器的 IP 地址、端口 (默认是 22)，用户名 (通常是 <code>root</code>) 和密码 (你在第一步设置的密码)。</li>
+<li>连接成功后，你会看到一个命令行界面。</li>
+</ul>
+</li>
+<li><p><strong>确定架构：</strong></p>
+<ul>
+<li><p>在 SSH 命令行中输入以下命令，查看路由器的 CPU 架构：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -m</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常见的架构有 <code>armv7l</code>, <code>aarch64</code> (arm64) 等。 <strong>请记住这个架构，稍后会用到。</strong> 不同的架构需要使用不同的 Entware 安装包。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>挂载存储设备：</strong></p>
+<ul>
+<li><p>将存储设备插入路由器的 USB 接口。</p>
+</li>
+<li><p>使用以下命令查看存储设备是否被识别：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>找到你的存储设备，例如 <code>/dev/sda1</code> 或 <code>/dev/sdb1</code>。 <strong>请注意，设备的名称可能会不同，请根据你的实际情况选择。</strong> 仔细检查设备名称，避免错误操作。</p>
+</li>
+<li><p>创建一个 <code>myentware</code> 文件夹，并在其下创建 <code>opt</code> 目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /mnt/你的存储设备路径/myentware/opt</span><br></pre></td></tr></table></figure>
+
+<p><strong>请将 <code>你的存储设备路径</code> 替换为你的实际路径。</strong> 例如 <code>/mnt/usb-25a3499d</code>。</p>
+</li>
+<li><p>将路由器原有的 <code>/opt</code> 目录的内容复制到外接存储设备上的 <code>/opt</code> 目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> -r /opt/* /mnt/你的存储设备路径/myentware/opt</span><br></pre></td></tr></table></figure>
+
+<p><strong>请将 <code>你的存储设备路径</code> 替换为你的实际路径。</strong> 例如 <code>/mnt/usb-25a3499d</code>。 这一步是为了保留路由器原有的 <code>/opt</code> 目录，避免出现问题。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>挂载存储设备 (续)：</strong></p>
+<ul>
+<li><p>使用 <code>mount -o bind</code> 命令将外接存储设备上的 <code>/opt</code> 目录挂载到路由器原有的 <code>/opt</code> 目录上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -o <span class="built_in">bind</span> /mnt/你的存储设备路径/myentware/opt /opt</span><br></pre></td></tr></table></figure>
+
+<p><strong>请将 <code>你的存储设备路径</code> 替换为你的实际路径。</strong> 例如 <code>/mnt/usb-25a3499d</code>。 这一步是将 Entware 的安装目录指向你的外接存储设备。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>安装 Entware：</strong></p>
+<ul>
+<li><p>运行以下命令下载并执行 Entware 安装脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://bin.entware.net/aarch64-k3.10/installer/alternative.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p><strong>请根据你的 CPU 架构选择正确的安装脚本。</strong> 如果你的架构不是 <code>aarch64-k3.10</code>，请将 URL 替换为正确的 URL。 你可以在 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://entware.net/">Entware 官方网站</a> 找到不同架构的安装脚本。 仔细阅读安装脚本的输出信息，确保没有错误发生。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>配置 Entware 环境：</strong></p>
+<ul>
+<li><p>编辑 <code>/etc/profile</code> 文件，添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/opt/bin:/opt/sbin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"><span class="built_in">alias</span> opkg=<span class="string">&quot;/opt/bin/opkg&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保存文件并退出。 可以使用 <code>nano</code> 或 <code>vi</code> 编辑器。</p>
+</li>
+<li><p>使环境变量和别名生效：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>这一步是为了让当前的 SSH 会话使用新的环境变量和别名。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>创建开机自启脚本：</strong></p>
+<ul>
+<li><p>创建 <code>/data/myscripts/auto_start.sh</code> 文件，添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 挂载 /opt 目录</span></span><br><span class="line">mount -o <span class="built_in">bind</span> /mnt/你的存储设备路径/myentware/opt /opt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置环境变量和别名</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/opt/bin:/opt/sbin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"><span class="built_in">alias</span> opkg=<span class="string">&quot;/opt/bin/opkg&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动 Entware 服务</span></span><br><span class="line"><span class="built_in">sleep</span> 10</span><br><span class="line">/opt/etc/init.d/rc.unslung start</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>请将 <code>你的存储设备路径</code> 替换为你的实际路径。</strong> 例如 <code>/mnt/usb-25a3499d</code>。 <code>sleep 10</code> 命令是为了等待存储设备挂载完成，避免启动 Entware 服务时出错。</p>
+</li>
+<li><p>设置 <code>/data/myscripts/auto_start.sh</code> 文件的执行权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /data/myscripts/auto_start.sh</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>配置防火墙自启脚本：</strong></p>
+<ul>
+<li><p>编辑 <code>/data/etc/config/firewall</code> 文件，添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config include &#x27;myscripts_auto_start&#x27;</span><br><span class="line">    option type &#x27;script&#x27;</span><br><span class="line">    option path &#x27;/data/myscripts/auto_start.sh&#x27;</span><br><span class="line">    option enabled &#x27;1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>这一步是为了让路由器在启动时自动执行 <code>/data/myscripts/auto_start.sh</code> 脚本。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>重启防火墙服务：</strong></p>
+<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service firewall restart</span><br></pre></td></tr></table></figure>
+</code></pre>
+<p>这一步是为了让防火墙加载新的配置。</p>
+</li>
+<li><p><strong>重启路由器：</strong></p>
+<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+</code></pre>
+<p>重启路由器，使所有配置生效。</p>
+</li>
+<li><p><strong>验证 Entware 是否安装成功：</strong></p>
+<ul>
+<li><p>重启路由器后，重新连接 SSH。</p>
+</li>
+<li><p>运行以下命令，查看 Entware 的服务是否正在运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/etc/init.d/rc.unslung status</span><br></pre></td></tr></table></figure>
+
+<p>如果 Entware 正在运行，你应该会看到一些服务的状态信息。</p>
+</li>
+<li><p>运行以下命令，检查环境变量是否正确设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+
+<p>输出应该包含 <code>/opt/bin</code> 和 <code>/opt/sbin</code>。</p>
+</li>
+<li><p>运行以下命令，更新软件包列表并安装 <code>nano</code> 编辑器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">opkg update</span><br><span class="line">opkg install nano</span><br></pre></td></tr></table></figure>
+
+<p>如果更新和安装成功，没有报错信息，则说明 Entware 已经可以正常工作。</p>
+</li>
+<li><p>运行以下命令，测试 <code>nano</code> 编辑器是否能够正常启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /tmp/test.txt</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>nano</code> 编辑器能够正常启动，则说明 Entware 已经成功安装。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>如果以上步骤都能够正常完成，那么恭喜你，你已经成功在小米万兆路由器上安装了 Entware！</strong></p>
+<p><strong>常见问题及解决方法：</strong></p>
+<ul>
+<li><strong>无法连接到路由器 SSH：</strong> 检查 SSH 服务是否已启用，以及 IP 地址、端口、用户名和密码是否正确。</li>
+<li><strong>存储设备无法挂载：</strong> 检查存储设备是否被路由器识别，以及挂载点是否正确。 使用 <code>dmesg</code> 命令查看系统日志，可能会有关于存储设备挂载失败的信息。</li>
+<li><strong>安装脚本下载失败：</strong> 检查网络连接是否正常，以及安装脚本的 URL 是否正确。 尝试使用 <code>ping</code> 命令测试网络连接。</li>
+<li><strong><code>opkg</code> 命令无法使用：</strong> 检查环境变量是否已正确设置。 确保 <code>/opt/bin</code> 和 <code>/opt/sbin</code> 已经添加到了 <code>PATH</code> 环境变量中。</li>
+<li><strong>路由器重启后 Entware 无法工作：</strong> 检查开机自启脚本是否已正确配置，以确保存储设备在启动时自动挂载，并且 Entware 服务能够正常启动。 查看系统日志，可能会有关于启动失败的信息。</li>
+<li><strong><code>opkg update</code> 失败：</strong> 检查系统时间是否正确。 错误的系统时间会导致 SSL 证书验证失败。 尝试手动设置时间，或者安装 <code>ntpd</code> 软件包来自动同步时间。</li>
+</ul>
+<p><strong>总结：</strong></p>
+<p>本教程提供了在小米万兆路由器上安装 Entware 的详细步骤。 请务必仔细阅读以上步骤，并根据你的实际情况进行调整。 如果你遇到问题，可以查阅 Entware 官方文档或在网上搜索相关的解决方案。</p>
+<p><strong>再次提醒：刷机有风险，请务必备份路由器固件！</strong></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/a8031044/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2025-03-29 15:53:53
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Openwrt/" title="Openwrt">
+                        #Openwrt
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/e50f2787/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+
+    
+  </div>
+
+
+        
+  <div class="footer">
+    <div class="social">
+      <ul>
+        
+      </ul>
+    </div>
+    
+      
+        <div class="footer-more">
+          
+            <a href="/">© 2026 Ｘ小站</a>
+            
+        </div>
+        
+          
+
+  </div>
+
+  
+<script src="/js/bug.js"></script>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)" rel="external nofollow noreferrer">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)" rel="external nofollow noreferrer">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)" rel="external nofollow noreferrer">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+          
+              <span class="search-close-icon" id="search-close-icon">
+                <a href="javascript: void(0)" rel="external nofollow noreferrer">
+                  <i class="iconfont icon-close"></i>
+                </a>
+              </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function () {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function () {
+      if (event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          // Debounce function
+          var debounce = function (func, wait) {
+            var timeout;
+            return function () {
+              var context = this;
+              var args = arguments;
+              var later = function () {
+                timeout = null;
+                func.apply(context, args);
+              };
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait);
+            };
+          };
+
+          $input.addEventListener('input', debounce(function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          }, 300));
+        },
+        error: function (xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = `<ul><span class="local-search-empty">未找到search.xml文件，具体请参考：<a href="https://github.com/zchengsite/hexo-theme-oranges#configuration" rel="external nofollow noreferrer" target="_black">configuration</a><span></ul>`;
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function () {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function () {
+      var path = "/search.xml";
+      searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+  
+
+        
+
+
+        
+
+      </div>
+    </div>
+  
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body>
+</html>
